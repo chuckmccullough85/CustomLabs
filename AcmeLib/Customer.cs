@@ -19,10 +19,11 @@ public class Customer
     public string Name { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
-    public Address? HomeAddress { get; set; }
-    public Address? BillingAddress { get; set; }
+    public virtual Address? HomeAddress { get; set; }
+    public virtual Address? BillingAddress { get; set; }
 
-    public ICollection<Account> Accounts { get; set; }
+    public virtual ICollection<Account> Accounts { get; set; }
+    public decimal TotalNetValue => Accounts.Sum(a => a.Balance);
 
     public override bool Equals(object? obj) => obj is Customer customer &&
                Id == customer.Id;
