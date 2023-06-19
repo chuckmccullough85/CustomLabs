@@ -10,4 +10,8 @@
     <ProjectReference Include="..\AcmeLib\AcmeLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="AcmeLib" />
+  </ItemGroup>
+
 </Project>

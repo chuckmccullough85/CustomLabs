@@ -1,0 +1,14 @@
+﻿@model AccountSummaryPageModel
+@{
+}
+
+<h1>Account Home Page</h1>
+<hr/>
+Welcome @Model.UserName <br/>
+
+<ul>
+    @foreach (var acct in Model.Accounts) {
+        <li><a asp-action="Detail" asp-route-id="@acct.Id" >@acct.Text</a></li>
+    }
+</ul>
+
