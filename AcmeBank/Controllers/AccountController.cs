@@ -32,5 +32,19 @@ namespace AcmeBank.Controllers
         {
             return View();
         }
+
+        public IActionResult Profile()
+        {
+            var model = new ProfileModel(1, "Hank Hill", "hank@propane.com", "123-456-7890",
+                new AddressViewModel("123 Main St", "Arlen", "TX", "12345"),
+                null);
+            return View(model);
+        }
+        public IActionResult SaveProfile(ProfileModel model)
+        {
+            if (!ModelState.IsValid) return View(nameof(Profile), model);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

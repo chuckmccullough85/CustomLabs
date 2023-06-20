@@ -1,0 +1,49 @@
+﻿@model ProfileModel
+
+@{
+    ViewBag.Title = "Customer Profile";
+}
+
+<h1>Customer Profile</h1>
+
+<form asp-action="SaveProfile">
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="alert-warning"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <label asp-for="Email" class="form-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="alert-warning"></span>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-6">
+            <label asp-for="Phone" class="form-label"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="alert-warning"></span>
+        </div>
+    </div>
+    <div class="row border border-1 mb-4">
+        <div class="col-6">
+            <p>Home Address</p>
+            <partial name="_Address" model="@Model.HomeAddress" />
+        </div>
+    </div>
+    <div class="row border border-1 mb-4">
+        <div class="col-6">
+            <p>Billing Address</p>
+            <partial name="_Address" model="@Model.BillingAddress" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

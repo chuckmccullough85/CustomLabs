@@ -1,0 +1,22 @@
+﻿@model AddressViewModel
+
+@if (Model != null)
+{
+
+    <label asp-for="Street" class="form-label"></label>
+    <input asp-for="Street" class="form-control" />
+    <span asp-validation-for="Street" class="alert-warning"></span>
+
+    <label asp-for="City" class="form-label"></label>
+    <input asp-for="City" class="form-control" />
+    <span asp-validation-for="City" class="alert-warning"></span>
+
+    <label asp-for="State" class="form-label"></label>
+    <select asp-for="State" asp-items="@Model.States" class="form-select"></select>
+    <span asp-validation-for="State" class="alert-warning"></span>
+
+    <label asp-for="ZipCode" class="form-label"></label>
+    <input asp-for="ZipCode" class="form-control" />
+    <span asp-validation-for="ZipCode" class="alert-warning"></span>
+
+}
