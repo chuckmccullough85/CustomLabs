@@ -1,4 +1,14 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using AcmeBank.Data;
+using AcmeBank.Areas.Identity.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("AcmeBankContextConnection") ?? throw new InvalidOperationException("Connection string 'AcmeBankContextConnection' not found.");
+
+builder.Services.AddDbContext<AcmeBankContext>(options => options.UseSqlServer(connectionString));
+
+builder.Services.AddDefaultIdentity<AcmeBankUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AcmeBankContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -20,7 +30,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
