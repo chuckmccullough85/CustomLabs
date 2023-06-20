@@ -12,8 +12,8 @@ builder.Services.AddDefaultIdentity<AcmeBankUser>(options => options.SignIn.Requ
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-builder.Services.AddScoped<IBankService, FakeService>();
+builder.Services.AddDbContext<BankDbContext>();
+builder.Services.AddScoped<IBankService, BankService>();
 
 var app = builder.Build();
 
