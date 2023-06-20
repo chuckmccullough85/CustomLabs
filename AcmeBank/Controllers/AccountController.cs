@@ -30,7 +30,10 @@ namespace AcmeBank.Controllers
 
         public IActionResult Detail(int id)
         {
-            return View();
+            var details = svc.GetAccountDetail(email, id);
+            var transactions = svc.GetTransactions(email, id);
+            var model = new TransactionModel(details.AcctNum, details.BBal, details.EBal, transactions);
+            return View(model);
         }
 
         public IActionResult Profile()

@@ -1,8 +1,27 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model TransactionModel
 @{
 }
 
+Detail page for account number @Model.AcctNumber
 
-Detail page for an account
+<table class="table table-striped">
+    <tr>
+        <td></td>
+        <td>Beginning Balance</td>
+        <td>@Model.BegBalance</td>
+    </tr>
+    @foreach(var t in Model.Transactions)
+    {
+        <tr>
+            <td>@t.Date</td>
+            <td>@t.Description</td>
+            <td>@t.Amt</td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td>Ending Balance</td>
+        <td>@Model.EndBalance</td>
+    </tr>
+
+</table>

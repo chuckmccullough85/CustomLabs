@@ -20,4 +20,15 @@ public class BankDbContext :DbContext
         base.OnConfiguring(optionsBuilder);
     }
 
+    override protected void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Customer>()
+            .Property(c => c.Email)
+            .HasMaxLength(150);
+        modelBuilder.Entity<Customer>()
+            .Property(c => c.Name)
+            .HasMaxLength(100)
+            .HasColumnName("customer_name");
+    }
+
 }
