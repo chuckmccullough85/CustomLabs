@@ -11,4 +11,13 @@ public class Account
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
     public decimal Balance 
         => BeginningBalance + Transactions.Sum(t => t.Amount);
+
+    public void Transfer(Account toAccount, decimal amount)
+    {
+        var debit = new Transaction() { Amount = -amount, Description = $"Transfer to {toAccount.Number}" };
+        var credit = new Transaction() { Amount = amount, Description = $"Transfer from {Number}" };
+        Transactions.Add(debit);
+        toAccount.Transactions.Add(credit);
+    }
+
 }

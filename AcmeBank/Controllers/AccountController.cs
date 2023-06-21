@@ -1,6 +1,7 @@
 ﻿using AcmeBank.Models;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AcmeBank.Controllers
 {
@@ -79,9 +80,30 @@ namespace AcmeBank.Controllers
                 };
             }
             svc.SaveCustomer(new CustomerProfile(model.Id, model.Name, model.Email, model.Phone, home, billing));
-
-
             return RedirectToAction(nameof(Index));
         }
+        
+        public IActionResult Transfer()
+        {
+            var accounts = svc.GetAccounts(email);
+            var name = svc.GetUserName(email);
+            return View(new TransferModel(accounts, name));
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult DoTransfer(TransferModel model)
+        {
+            if (!ModelState.IsValid || model.FromAccount == model.ToAccount)
+            {
+                model.Accounts = svc.GetAccounts(email)
+                    .Select(a=>new SelectListItem(a.Text, a.Id.ToString()));
+                model.Name = svc.GetUserName(email);
+                return View(nameof(Transfer), model);
+            }
+
+            svc.Transfer(email, model.FromAccount, model.ToAccount, model.Amount);
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

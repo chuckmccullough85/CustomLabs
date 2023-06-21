@@ -1,0 +1,28 @@
+﻿@model TransferModel
+@{
+}
+
+<h1>Hi @Model.Name, let's Transfer Funds</h1>
+<hr/>
+<form asp-action="DoTransfer">
+
+    <label asp-for="FromAccount" class="col-form-label"></label>
+    <select asp-for="FromAccount" asp-items="@Model.Accounts" class="form-select">
+        <option selected value="-1">Please select account</option>
+    </select>
+    <span asp-validation-for="FromAccount" class="alert-warning"></span>
+    <label asp-for="ToAccount" class="col-form-label"></label>
+    <select asp-for="ToAccount" asp-items="@Model.Accounts" class="form-select">
+        <option selected value="-1">Please select account</option>
+    </select>
+    <span asp-validation-for="ToAccount" class="alert-warning"></span>
+
+    <label asp-for="Amount"></label>
+    <input asp-for="Amount" class="form-control" />
+    <span asp-validation-for="Amount"></span>
+
+    <button type="submit" class="btn btn-primary">Transfer</button>
+
+
+
+</form>

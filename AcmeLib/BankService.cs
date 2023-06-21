@@ -9,19 +9,22 @@ public class BankService : IBankService
         this.ctx = ctx;
     }
 
-    public (string AcctNum, decimal BBal, decimal EBal) GetAccountDetail(string email, int id)
-    {
-        var a = ctx.Customers
-            .Single(c => c.Email == email)
-            .Accounts.Single(a => a.Id == id);
-        return (a.Number, a.BeginningBalance, a.Balance);
-    }
-    public IEnumerable<TransactionDetail> GetTransactions(string email, int id)
+    private Account GetAccount(string email, int accountId)
     {
         return ctx.Customers
             .Single(c => c.Email == email)
             .Accounts
-            .Single(a => a.Id == id)
+            .Single(a => a.Id == accountId);
+    }
+
+    public (string AcctNum, decimal BBal, decimal EBal) GetAccountDetail(string email, int id)
+    {
+        var a = GetAccount(email, id);
+        return (a.Number, a.BeginningBalance, a.Balance);
+    }
+    public IEnumerable<TransactionDetail> GetTransactions(string email, int id)
+    {
+        return GetAccount(email, id)
             .Transactions
             .Select(t => new TransactionDetail(t.Date, t.Description ?? "", t.Amount))
             .ToList();
@@ -82,4 +85,13 @@ public class BankService : IBankService
 
         ctx.SaveChanges();
     }
+
+    public void Transfer(string email, int fromAcct, int toAcct, decimal amount)
+    {
+        var debitAccount = GetAccount(email, fromAcct);
+        var creditAccount = GetAccount(email, toAcct);
+        debitAccount.Transfer(creditAccount, amount);
+        ctx.SaveChanges();
+    }
+
 }

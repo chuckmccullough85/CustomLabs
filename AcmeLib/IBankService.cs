@@ -13,5 +13,6 @@
         IEnumerable<TransactionDetail> GetTransactions(string email, int id);
         string GetUserName(string email);
         void SaveCustomer(CustomerProfile customerProfile);
+        void Transfer(string email, int fromAcct, int toAcct, decimal amount);
     }
 }
