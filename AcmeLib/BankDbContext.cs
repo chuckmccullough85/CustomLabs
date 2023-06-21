@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace AcmeLib;
 
@@ -15,7 +16,10 @@ public class BankDbContext :DbContext
             Integrated Security=True;Connect Timeout=30;
             Encrypt=False;Trust Server Certificate=False;
             Application Intent=ReadWrite;Multi Subnet Failover=False
-            """);
+            """)
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging();
+
         optionsBuilder.UseLazyLoadingProxies();
         base.OnConfiguring(optionsBuilder);
     }

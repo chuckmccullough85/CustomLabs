@@ -6,7 +6,7 @@
 
 <h1>Customer Profile</h1>
 
-<form asp-action="SaveProfile">
+<form asp-action="SaveProfile" asp-route-id="@Model.Id">
     <div class="row">
         <div class="col-6">
             <label asp-for="Name" class="form-label"></label>

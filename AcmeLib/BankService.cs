@@ -36,12 +36,50 @@ public class BankService : IBankService
             .ToList();
     }
 
-
     public string GetUserName(string email)
     {
         return ctx.Customers
             .Where(c => c.Email == email)
             .Select(c => c.Name)
             .First();
+    }
+
+    public CustomerProfile GetCustomer(string email)
+    {
+        var c = ctx.Customers.Single(c => c.Email == email);
+        return new CustomerProfile(c.Id, c.Name, c.Email, c.Phone, c.HomeAddress, c.BillingAddress);
+    }
+
+    public void SaveCustomer(CustomerProfile customerProfile)
+    {
+        var cust = ctx.Customers.Single(c => c.Id == customerProfile.Id);
+        cust.Name = customerProfile.Name;
+        cust.Email = customerProfile.Email;
+        cust.Phone = customerProfile.Phone;
+
+        if (cust.HomeAddress == null)
+        {
+            cust.HomeAddress = customerProfile.HomeAddress;
+        }
+        else
+        {
+            cust.HomeAddress.Street = customerProfile.HomeAddress?.Street ?? "";
+            cust.HomeAddress.City = customerProfile.HomeAddress?.City ?? "";
+            cust.HomeAddress.State = customerProfile.HomeAddress?.State ?? "";
+            cust.HomeAddress.ZipCode = customerProfile.HomeAddress?.ZipCode ?? "";
+        }
+        if(cust.BillingAddress == null)
+        {
+            cust.BillingAddress = customerProfile.BillingAddress;
+        }
+        else
+        {
+            cust.BillingAddress.Street = customerProfile.BillingAddress?.Street ?? "";
+            cust.BillingAddress.City = customerProfile.BillingAddress?.City ?? "";
+            cust.BillingAddress.State = customerProfile.BillingAddress?.State ?? "";
+            cust.BillingAddress.ZipCode = customerProfile.BillingAddress?.ZipCode ?? "";
+        }
+
+        ctx.SaveChanges();
     }
 }
