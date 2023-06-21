@@ -8,7 +8,8 @@ var connectionString = builder.Configuration.GetConnectionString("AcmeBankContex
 
 builder.Services.AddDbContext<AcmeBankContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddDefaultIdentity<AcmeBankUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AcmeBankContext>();
+builder.Services.AddDefaultIdentity<AcmeBankUser>(options => 
+    options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AcmeBankContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

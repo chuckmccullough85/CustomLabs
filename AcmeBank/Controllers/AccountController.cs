@@ -1,26 +1,27 @@
 ﻿using AcmeBank.Models;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace AcmeBank.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IBankService svc;
-        private string email = "hank@propane.com";
+        private string Email => User.Identity!.Name!;
         public AccountController(IBankService svc)
         {
             this.svc = svc;
         }
 
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             // step 1 - validate parameters
             // interact with the business layer
-            string user = svc.GetUserName(email);
-            var accounts = svc.GetAccounts(email);
+            string user = await svc.GetUserName(Email);
+            var accounts = await svc.GetAccounts(Email);
             // create a view model
             var model = new AccountSummaryPageModel(
                                user,
@@ -29,17 +30,19 @@ namespace AcmeBank.Controllers
             return View(model);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
-            var details = svc.GetAccountDetail(email, id);
-            var transactions = svc.GetTransactions(email, id);
+            var details_t = svc.GetAccountDetail(Email, id);
+            var transactions_t = svc.GetTransactions(Email, id);
+            var details = await details_t;
+            var transactions = await transactions_t;
             var model = new TransactionModel(details.AcctNum, details.BBal, details.EBal, transactions);
             return View(model);
         }
 
-        public IActionResult Profile()
+        public async Task<IActionResult> Profile()
         {
-            var cust = svc.GetCustomer(email);
+            var cust = await svc.GetCustomer(Email);
             AddressViewModel? home = null;
             AddressViewModel? billing = null;
             if (cust.HomeAddress != null)
@@ -53,7 +56,7 @@ namespace AcmeBank.Controllers
             var model = new ProfileModel(cust.Id, cust.Name, cust.Email, cust.Phone, home!, billing);
             return View(model);
         }
-        public IActionResult SaveProfile(ProfileModel model)
+        public async Task<IActionResult> SaveProfile(ProfileModel model)
         {
             if (!ModelState.IsValid) return View(nameof(Profile), model);
 
@@ -79,29 +82,29 @@ namespace AcmeBank.Controllers
                     ZipCode = model.BillingAddress.ZipCode
                 };
             }
-            svc.SaveCustomer(new CustomerProfile(model.Id, model.Name, model.Email, model.Phone, home, billing));
+            await svc.SaveCustomer(new CustomerProfile(model.Id, model.Name, model.Email, model.Phone, home, billing));
             return RedirectToAction(nameof(Index));
         }
         
-        public IActionResult Transfer()
+        public async Task<IActionResult> Transfer()
         {
-            var accounts = svc.GetAccounts(email);
-            var name = svc.GetUserName(email);
+            var accounts = await svc.GetAccounts(Email);
+            var name = await svc.GetUserName(Email);
             return View(new TransferModel(accounts, name));
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public IActionResult DoTransfer(TransferModel model)
+        public async Task<IActionResult> DoTransfer(TransferModel model)
         {
             if (!ModelState.IsValid || model.FromAccount == model.ToAccount)
             {
-                model.Accounts = svc.GetAccounts(email)
+                model.Accounts = (await svc.GetAccounts(Email))
                     .Select(a=>new SelectListItem(a.Text, a.Id.ToString()));
-                model.Name = svc.GetUserName(email);
+                model.Name = await svc.GetUserName(Email);
                 return View(nameof(Transfer), model);
             }
 
-            svc.Transfer(email, model.FromAccount, model.ToAccount, model.Amount);
+            await svc.Transfer(Email, model.FromAccount, model.ToAccount, model.Amount);
             return RedirectToAction(nameof(Index));
         }
 

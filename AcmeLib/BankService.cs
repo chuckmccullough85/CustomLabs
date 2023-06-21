@@ -17,12 +17,12 @@ public class BankService : IBankService
             .Single(a => a.Id == accountId);
     }
 
-    public (string AcctNum, decimal BBal, decimal EBal) GetAccountDetail(string email, int id)
+    public async Task<(string AcctNum, decimal BBal, decimal EBal)> GetAccountDetail(string email, int id)
     {
         var a = GetAccount(email, id);
         return (a.Number, a.BeginningBalance, a.Balance);
     }
-    public IEnumerable<TransactionDetail> GetTransactions(string email, int id)
+    public async Task<IEnumerable<TransactionDetail>> GetTransactions(string email, int id)
     {
         return GetAccount(email, id)
             .Transactions
@@ -30,30 +30,30 @@ public class BankService : IBankService
             .ToList();
     }
 
-    public IEnumerable<IdText> GetAccounts(string email)
+    public async Task<IEnumerable<IdText>> GetAccounts(string email)
     {
-        return ctx.Customers
+        return await Task.Run(()=> ctx.Customers
             .Single(c => c.Email == email)
             .Accounts
             .Select(a => new IdText(a.Id, a.AccountType.ToString()))
-            .ToList();
+            .ToList());
     }
 
-    public string GetUserName(string email)
+    public async Task<string> GetUserName(string email)
     {
-        return ctx.Customers
+        return await Task.Run(() => ctx.Customers
             .Where(c => c.Email == email)
             .Select(c => c.Name)
-            .First();
+            .First());
     }
 
-    public CustomerProfile GetCustomer(string email)
+    public async Task<CustomerProfile> GetCustomer(string email)
     {
-        var c = ctx.Customers.Single(c => c.Email == email);
+        var c = await Task.Run(()=> ctx.Customers.Single(c => c.Email == email));
         return new CustomerProfile(c.Id, c.Name, c.Email, c.Phone, c.HomeAddress, c.BillingAddress);
     }
 
-    public void SaveCustomer(CustomerProfile customerProfile)
+    public async Task SaveCustomer(CustomerProfile customerProfile)
     {
         var cust = ctx.Customers.Single(c => c.Id == customerProfile.Id);
         cust.Name = customerProfile.Name;
@@ -83,15 +83,15 @@ public class BankService : IBankService
             cust.BillingAddress.ZipCode = customerProfile.BillingAddress?.ZipCode ?? "";
         }
 
-        ctx.SaveChanges();
+        await ctx.SaveChangesAsync();
     }
 
-    public void Transfer(string email, int fromAcct, int toAcct, decimal amount)
+    public async Task Transfer(string email, int fromAcct, int toAcct, decimal amount)
     {
-        var debitAccount = GetAccount(email, fromAcct);
-        var creditAccount = GetAccount(email, toAcct);
+        var debitAccount = await Task.Run(()=>GetAccount(email, fromAcct));
+        var creditAccount = await Task.Run(()=>GetAccount(email, toAcct));
         debitAccount.Transfer(creditAccount, amount);
-        ctx.SaveChanges();
+        await ctx.SaveChangesAsync();
     }
 
 }

@@ -7,12 +7,12 @@
     public record TransactionDetail (DateTime Date, string Description, decimal Amt);
     public interface IBankService
     {
-        (string AcctNum, decimal BBal, decimal EBal) GetAccountDetail(string email, int id);
-        IEnumerable<IdText> GetAccounts(string email);
-        CustomerProfile GetCustomer(string email);
-        IEnumerable<TransactionDetail> GetTransactions(string email, int id);
-        string GetUserName(string email);
-        void SaveCustomer(CustomerProfile customerProfile);
-        void Transfer(string email, int fromAcct, int toAcct, decimal amount);
+        Task<(string AcctNum, decimal BBal, decimal EBal)> GetAccountDetail(string email, int id);
+        Task<IEnumerable<IdText>> GetAccounts(string email);
+        Task<CustomerProfile> GetCustomer(string email);
+        Task<IEnumerable<TransactionDetail>> GetTransactions(string email, int id);
+        Task<string> GetUserName(string email);
+        Task SaveCustomer(CustomerProfile customerProfile);
+        Task Transfer(string email, int fromAcct, int toAcct, decimal amount);
     }
 }
