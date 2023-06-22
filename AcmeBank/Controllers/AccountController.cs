@@ -108,5 +108,28 @@ namespace AcmeBank.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult>  BillPay()
+        {
+            var items = await svc.GetScheduledBillPayItems(Email);
+
+            var model = new BillPayPageModel(
+                new BillPayItem(null, DateOnly.FromDateTime(DateTime.Today), 0, ""),
+                items.Select(i => new BillPayItem(i.Id, DateOnly.FromDateTime(i.Scheduled), i.Amount, i.Payee)));
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddBillPayItem(BillPayPageModel item)
+        {
+            if (ModelState.IsValid)
+            {
+                await svc.ScheduleBillPay(Email, new ScheduledBillPay(0, 
+                    item.NewItem.Scheduled, 
+                    item.NewItem.Amount, 
+                    item.NewItem.Payee));
+            }
+            return RedirectToAction(nameof(BillPay));
+        }
+
     }
 }

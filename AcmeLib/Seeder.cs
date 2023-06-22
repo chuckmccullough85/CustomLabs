@@ -19,6 +19,11 @@ public static class Seeder
             Number = "123",
             BeginningBalance = 1000
         };
+        a1.ScheduledBillPays.Add(new ScheduledBillPay(0, 
+            DateOnly.FromDateTime(DateTime.Today.AddMonths(1)), 100, "ArlenGas"));
+        a1.ScheduledBillPays.Add(new ScheduledBillPay(0,
+            DateOnly.FromDateTime(DateTime.Today.AddMonths(2)), 150, "Landry Middle School"));
+
 
         var t1 = new Transaction() { Amount = 100, Description="Check 101" };
         a1.Transactions.Add(t1);

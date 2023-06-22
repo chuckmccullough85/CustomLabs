@@ -20,7 +20,7 @@ public class BankService : IBankService
     public async Task<(string AcctNum, decimal BBal, decimal EBal)> GetAccountDetail(string email, int id)
     {
         var a = GetAccount(email, id);
-        return (a.Number, a.BeginningBalance, a.Balance);
+        return await Task.Run(()=>(a.Number, a.BeginningBalance, a.Balance));
     }
     public async Task<IEnumerable<TransactionDetail>> GetTransactions(string email, int id)
     {
@@ -94,4 +94,17 @@ public class BankService : IBankService
         await ctx.SaveChangesAsync();
     }
 
+    public async Task ScheduleBillPay(string email, ScheduledBillPay newItem)
+    {
+        var acct = ctx.Customers.Single(c=> c.Email == email).Accounts.First();
+        acct.ScheduledBillPays.Add(newItem);
+
+        await ctx.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<ScheduledBillPay>> GetScheduledBillPayItems(string email)
+    {
+        return await Task.Run(()=> ctx.Customers.Single(c => c.Email == email).Accounts.First()
+            .ScheduledBillPays.ToList().AsEnumerable());
+    }
 }

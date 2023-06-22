@@ -19,15 +19,15 @@ public class BankServiceTests : IDisposable
     }
 
     [Fact]
-    public void TestGetName()
+    public async Task TestGetName()
     {
-        var n = svc.GetUserName("hank@propane.com");
+        var n = await svc.GetUserName("hank@propane.com");
         Assert.Equal("Hank Hill", n);
     }
     [Fact]
     public void TestGetAccounts()
     {
-        var accounts = svc.GetAccounts("hank@propane.com");
+        var accounts = svc.GetAccounts("hank@propane.com").Result;
         Assert.Equal(2, accounts.Count());
     }
 

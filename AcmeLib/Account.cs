@@ -9,6 +9,7 @@ public class Account
     public AccountType AccountType { get; set; } = AccountType.Checking;
     public decimal BeginningBalance { get; set; } = 0;
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
+    public virtual ICollection<ScheduledBillPay> ScheduledBillPays { get; set; } = new List<ScheduledBillPay>();        
     public decimal Balance 
         => BeginningBalance + Transactions.Sum(t => t.Amount);
 
