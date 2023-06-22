@@ -1,0 +1,14 @@
+﻿@model IEnumerable<BillPayItem>
+@{
+}
+
+
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col">@item.Scheduled.ToShortDateString()</div>
+        <div class="col">@item.Payee</div>
+        <div class="col">@($"{item.Amount}")</div>
+        <div class="col"><a onclick="DeleteBill(@item.Id)">Delete</a></div>
+    </div>
+}

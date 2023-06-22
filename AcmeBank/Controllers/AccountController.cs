@@ -110,16 +110,14 @@ namespace AcmeBank.Controllers
 
         public async Task<IActionResult>  BillPay()
         {
-            var items = await svc.GetScheduledBillPayItems(Email);
-
             var model = new BillPayPageModel(
                 new BillPayItem(null, DateOnly.FromDateTime(DateTime.Today), 0, ""),
-                items.Select(i => new BillPayItem(i.Id, DateOnly.FromDateTime(i.Scheduled), i.Amount, i.Payee)));
+                await GetScheduledBillsHelper());
             return View(model);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddBillPayItem(BillPayPageModel item)
+        public async Task AddBillPayItem(BillPayPageModel item)
         {
             if (ModelState.IsValid)
             {
@@ -128,8 +126,24 @@ namespace AcmeBank.Controllers
                     item.NewItem.Amount, 
                     item.NewItem.Payee));
             }
-            return RedirectToAction(nameof(BillPay));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteScheduledBillPay(int id)
+        {
+            await svc.DeleteScheduledBillPay(Email, id);
+            return PartialView("_ScheduledBillPay", await GetScheduledBillsHelper());
+        }
+
+        public async Task<IActionResult> GetScheduledBills()
+        {
+            return PartialView("_ScheduledBillPay", await GetScheduledBillsHelper());
+        }
+
+        private async Task<IEnumerable<BillPayItem>> GetScheduledBillsHelper()
+            => (await svc.GetScheduledBillPayItems(Email)).Select(i =>
+                new BillPayItem(i.Id, DateOnly.FromDateTime(i.Scheduled), i.Amount, i.Payee));
+ 
 
     }
 }

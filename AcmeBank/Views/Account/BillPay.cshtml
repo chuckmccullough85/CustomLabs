@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-6">
         <div class="container-fluid">
-            <form asp-action="AddBillPayItem">
+            <form asp-action="AddBillPayItem" id="billpay_form">
                 <div class="row">
                     <div class="col">
                         <label asp-for="NewItem.Scheduled" class="form-label"></label>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="submit" class="btn btn-primary">Schedule</button>
+                        <button type="submit" class="btn btn-primary" >Schedule</button>
                     </div>
                     <div class="col">
                         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
@@ -41,15 +41,7 @@
             </form>
         </div>
     </div>
-    <div class="col-6">
-        @foreach(var item in Model!.Items)
-        {
-            <div class="row">
-                <div class="col">@item.Scheduled.ToShortDateString()</div>
-                <div class="col">@item.Payee</div>
-                <div class="col">@($"{item.Amount}")</div>
-                <div class="col"><a asp-action="DeleteScheduledBillPay" asp-route-id="@item.Id">Delete</a></div>
-            </div>
-        }
+    <div class="col-6" id="bill_list">
+        <partial name="_ScheduledBillPay" model="@Model.Items" />
     </div>
 </div>

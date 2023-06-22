@@ -107,4 +107,12 @@ public class BankService : IBankService
         return await Task.Run(()=> ctx.Customers.Single(c => c.Email == email).Accounts.First()
             .ScheduledBillPays.ToList().AsEnumerable());
     }
+
+    public async Task DeleteScheduledBillPay(string email, int id)
+    {
+        var acct = ctx.Customers.Single(c => c.Email == email).Accounts.First();
+        var item = acct.ScheduledBillPays.Single(i => i.Id == id);
+        acct.ScheduledBillPays.Remove(item);
+        await ctx.SaveChangesAsync();
+    }
 }

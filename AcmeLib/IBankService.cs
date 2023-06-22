@@ -18,5 +18,6 @@
         Task<string> GetUserName(string email);
         Task SaveCustomer(CustomerProfile customerProfile);
         Task Transfer(string email, int fromAcct, int toAcct, decimal amount);
+        Task DeleteScheduledBillPay(string email, int id);
     }
 }
