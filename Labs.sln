@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcmeBankApi", "AcmeBankApi\AcmeBankApi.csproj", "{83025417-C29D-4BEC-BA39-22D13CAAECBB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{86B2852A-CE05-46DA-B6E8-E061C0CCEC0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86B2852A-CE05-46DA-B6E8-E061C0CCEC0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86B2852A-CE05-46DA-B6E8-E061C0CCEC0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83025417-C29D-4BEC-BA39-22D13CAAECBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83025417-C29D-4BEC-BA39-22D13CAAECBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83025417-C29D-4BEC-BA39-22D13CAAECBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83025417-C29D-4BEC-BA39-22D13CAAECBB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
