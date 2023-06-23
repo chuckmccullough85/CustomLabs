@@ -25,6 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AcmeBank\AcmeBank.csproj" />
     <ProjectReference Include="..\AcmeLib\AcmeLib.csproj" />
+    <ProjectReference Include="..\AcmeWebApiClient\AcmeWebApiClient.csproj" />
   </ItemGroup>
 
 </Project>
